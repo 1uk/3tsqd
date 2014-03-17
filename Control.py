@@ -8,27 +8,19 @@ class Control(object):
 
     #Konstruktor
     def __init__(self):
-        self.size = self.weight, self.height = 640, 400
+        self.size = self.weight, self.height = 610, 610
 
     #Extra Initialisierungsfunktion
     def on_init(self):
         pygame.init()
-        self.window = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
+        self.window = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF | pygame.RESIZABLE)
         self._running = True
 
         #Objekt Array
-        f = [[], [], []]
+        self.f = [[], [], []]
         for a in range(0, 3):
             for b in range(0, 3):
-                f[a].append(Field())
-
-
-        rect = pygame.Rect(100, 100, 10, 10)
-        pygame.draw.rect(self.window, 0x00FF00, rect, 0)
-
-#        box = pygame.Rect(100, 100, 10, 10)
-#        pygame.draw.rect(self.window, (0,100,100), box, 0)
-
+                self.f[a].append(Field(b, a))
 
     #Hauptfunktion (der Anfang & das Ende)
     def on_execute(self):
@@ -59,6 +51,14 @@ class Control(object):
 
     #Renderroutine
     def on_render(self):
+        #zeichnet alle grossen Felder
+        for a in range(0, 3):
+            for b in range(0, 3):
+                pygame.draw.rect(self.window, 0xFFFFFF, self.f[a][b].rect, 0)
+                for c in range(0,3):
+                    for d in range(0,3):
+                        pygame.draw.rect(self.window, 0x0000FF, self.f[a][b].cf[c][d].rect, 0)
+
         pygame.display.update()
 
     #Aufraeumen (nur ganz am Ende)
