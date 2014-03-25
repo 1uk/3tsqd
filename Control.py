@@ -8,7 +8,7 @@ class Control(object):
 
     #Konstruktor
     def __init__(self):
-        self.size = self.weight, self.height = 610, 610
+        self.size = self.weight, self.height = 640, 640
 
     #Extra Initialisierungsfunktion
     def on_init(self):
@@ -18,9 +18,9 @@ class Control(object):
 
         #Objekt Array
         self.f = [[], [], []]
-        for a in range(0, 3):
-            for b in range(0, 3):
-                self.f[a].append(Field(b, a))
+        for x in range(0, 3):
+            for y in range(0, 3):
+                self.f[x].append(Field(x, y))
 
     #Hauptfunktion (der Anfang & das Ende)
     def on_execute(self):
@@ -28,6 +28,7 @@ class Control(object):
         if (self.on_init() == False):
             self._running = False
 
+        self.on_render()
         #Laeuft von Anfang bis Objektende
         while (self._running):
             #Bei events wie Mausklick
@@ -37,13 +38,33 @@ class Control(object):
             #Spielroutine
             self.on_loop()
             #Renderroutine
-            self.on_render()
 
         self.on_cleanup()
 
     #Verarbeitet Spielerevent
     def on_event(self, event):
-        pass
+        if event.type == MOUSEBUTTONDOWN:
+            if event.button == 0:
+                self.on_lbutton_down(event)
+
+    def on_lbutton_down(self, event):
+        #get mouse coordinates
+        x, y = pygame.mouse.get_pos()
+
+        #check in which rect mouse is in
+        #for x in range(0,3):
+        #        #big x gap
+        #        xcdt += x * 20
+        #    for y in range(0,3):
+        #        #big y gap
+        #        ycdt += y *20
+        #        for xx in range(0,3):
+        #            #small x gap
+        #            xxcdt += xx * 10
+        #            for yy in range(0,3):
+        #                #small y gap
+        #                yycdt += yy * 10
+        #                if ()
 
     #Spielroutine
     def on_loop(self):
@@ -51,13 +72,16 @@ class Control(object):
 
     #Renderroutine
     def on_render(self):
+        self.draw_rects()
+
+    def draw_rects(self):
         #zeichnet alle grossen Felder
-        for a in range(0, 3):
-            for b in range(0, 3):
-                pygame.draw.rect(self.window, 0xFFFFFF, self.f[a][b].rect, 0)
-                for c in range(0,3):
-                    for d in range(0,3):
-                        pygame.draw.rect(self.window, 0x0000FF, self.f[a][b].cf[c][d].rect, 0)
+        for x in range(0, 3):
+            for y in range(0, 3):
+              #  pygame.draw.rect(self.window, 0xFFFFFF, self.f[x][y].rect, 0)
+                for xx in range(0,3):
+                    for yy in range(0,3):
+                        pygame.draw.rect(self.window, 0x0000FF, self.f[x][y].cf[xx][yy].rect, 0)
 
         pygame.display.update()
 

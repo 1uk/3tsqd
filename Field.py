@@ -9,7 +9,9 @@ class Field(object):
         self._state = 0
         width = 200
         height = 200
-        self.rect = pygame.Rect(x* (width + 5), y*(height + 5), width, height)
+        self.width = x * (width + 20)
+        self.height = y * (height + 20)
+        self.rect = pygame.Rect(self.width, self.height, width, height)
 
         self.on_init()
 
@@ -17,9 +19,12 @@ class Field(object):
 
         #Objekt Array
         self.cf = [[], [], []]
-        for a in range(0, 3):
-            for b in range(0, 3):
-                self.cf[a].append(C_Field(b, a))
+        for x in range(0, 3):
+            for y in range(0, 3):
+                self.cf[x].append(C_Field(x, y, self.rect))
+
+    def draw(self):
+        pass
 
 
     def bide(self):
