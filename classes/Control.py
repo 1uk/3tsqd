@@ -1,6 +1,8 @@
 import pygame
 from pygame.locals import *
 from Fields import *
+from Player import *
+from Gui import *
 
 import time
 
@@ -9,16 +11,20 @@ class Control(object):
 
     #Konstruktor
     def __init__(self):
-        self.size = self.weight, self.height = 640, 640
+        self.turn = 0
 
     #Extra Initialisierungsfunktion
     def on_init(self):
         pygame.init()
-        self.window = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF | pygame.RESIZABLE)
         self._running = True
 
-        #Objekt Array
-        self.init_field()
+        #instantinate gui
+        self.g = Gui()
+
+        #instantinate player
+        self.p1 = Player(0)
+        self.p2 = Player(1)
+
 
     #Hauptfunktion (der Anfang & das Ende)
     def on_execute(self):
@@ -29,9 +35,9 @@ class Control(object):
         self.on_render()
         #Laeuft von Anfang bis Objektende
         while (self._running):
-            #Bei events wie Mausklick
             for event in pygame.event.get():
                 self.on_event(event)
+            print "ende???"
 
             #Spielroutine
             self.on_loop()
@@ -48,24 +54,22 @@ class Control(object):
         elif event.type == MOUSEBUTTONDOWN:
             #left
             if event.button == 1:
-                self.on_lbutton_down(event)
+                self.on_lbutton_down(event, self.player)
 
 
     #Spielroutine
     def on_loop(self):
-        pass
+        self.player = self.turn % 2 + 1
+
+#        self.f.is_field_won()
+#        self.f.is_game_won()
 
 
     #Renderroutine
     def on_render(self):
+        self.g.render_grid()
         pygame.display.update()
 
-    def init_field(self):
-        self.f = [[], [], []]
-        for y in range(0, 3):
-            for x in range(0, 3):
-                self.f[x].append(Fields(x, y))
-                self.f[x][y].draw(self.window)
 
     #Aufraeumen (nur ganz am Ende)
     def on_cleanup(self):
@@ -73,10 +77,11 @@ class Control(object):
 
 
 
+    ############
+    ## Events ##
+    ############
 
-
-
-    def on_lbutton_down(self, event):
+    def on_lbutton_down(self, event, player):
         #event.pos siehe pygame.org/docs/ref/event.html
         #mouseposition
         a = b = c = d = 0
@@ -98,6 +103,10 @@ class Control(object):
                         if (top <= my and my <= top + height):
                             y = b
                             yy = d
-        self.f[y][x].b[yy][xx].fill(1, self.window)
-        print "Geklickt:", x, "-", y, "-", xx, "-" ,yy
+        if self.f[y][x].b[yy][xx].state == 0:
+            self.f[y][x].b[yy][xx].state = player
+            print player
+            self.turn += 1
+        #print "turn += 1"
+        #print "Geklickt:", x, "-", y, "-", xx, "-" ,yy
 
