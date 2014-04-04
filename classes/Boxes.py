@@ -5,26 +5,31 @@ import Fields
 
 class Boxes(object):
 
+    #static variables
+    width = 60
+    height = 60
+    gap = 10
+
     def __init__(self, x, y, prect):
         #Status Leer 0, Kreuz 1, Kreis 2
         self.state = 0
-        self.width = 60
-        self.height = 60
-        self.left = prect.left + x * (self.width + 10)
-        self.top = prect.top + y * (self.height + 10) 
+        self.left = prect.left + x * (self.width + self.gap)
+        self.top = prect.top + y * (self.height + self.gap) 
         self.rect = pygame.Rect(self.left, self.top, self.width, self.height)
 
     def draw(self, window):
         pygame.draw.rect(window, 0xFFFFFF, self.rect, 0)
 
-    def fill(self, window):
+    def render(self, window):
         #cross
+        if (self.state == 0):
+            pass
         if (self.state == 1):
-            gap = 10
-            left = self.left + 10
-            right = self.left + self.width - 10
-            top = self.top + 10
-            bottom = self.top + self.height - 10
+            margin = 10
+            left = self.left + margin
+            right = self.left + width - margin
+            top = self.top + margin
+            bottom = self.top + height - margin
             pygame.draw.line(window, 0x000000, (top, left), (bottom, right), 8)
             pygame.draw.line(window, 0x000000, (bottom, left), (top, right), 8)
         elif (self.state == 2):

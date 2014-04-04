@@ -30,23 +30,12 @@ class Gui(object):
                 self.f[x][y].render(self.window)
 
     def get_rect_adress(self, mx, my):
-            for a in range(0,3):
-                if (self.f.[a][b].left < mx):
-                    if (self.f[a][b].left.  < my):
-                            
-                    
-                    for c in range(0,3):
-                        for d in range(0,3):
-                            left = self.f[a][b].b[c][d].left
-                            top = self.f[a][b].b[c][d].top
-                            right = left + self.f[a][b].b[c][d].width
-                            down = top + self.f[a][b].b[c][d].height
-
-            if (left <= mx and mx <= left + width):
-                x = a
-                xx = c
-            if (top <= my and my <= top + height):
-                y = b
-                yy = d
-
-
+            for a in range(3,0):
+                if (Fields.width * a < mx):
+                    for b in range(3,0):
+                        if (Fields.height * b < my):
+                            for c in range(3,0):
+                                if ((Boxes.width+Boxes.gap) * c < mx):
+                                    for d in range(3,0):
+                                        if ((Boxes.height+Boxes.gap) * d < my):
+                                            return a, b, c, d

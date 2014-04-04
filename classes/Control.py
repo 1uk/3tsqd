@@ -84,29 +84,8 @@ class Control(object):
     def on_lbutton_down(self, event, player):
         #event.pos siehe pygame.org/docs/ref/event.html
         #mouseposition
-        a = b = c = d = 0
-        mx = event.pos[0]
-        my = event.pos[1]
         #check in which rect mouse is in
-        for a in range(0,3):
-             for b in range(0,3):
-                for c in range(0,3):
-                    for d in range(0,3):
-                        left = self.f[a][b].b[c][d].left
-                        top = self.f[a][b].b[c][d].top
-                        width = self.f[a][b].b[c][d].width
-                        height = self.f[a][b].b[c][d].height
-
-                        if (left <= mx and mx <= left + width):
-                            x = a
-                            xx = c
-                        if (top <= my and my <= top + height):
-                            y = b
-                            yy = d
-        if self.f[y][x].b[yy][xx].state == 0:
-            self.f[y][x].b[yy][xx].state = player
-            print player
-            self.turn += 1
-        #print "turn += 1"
-        #print "Geklickt:", x, "-", y, "-", xx, "-" ,yy
+        a, b, c, d = self.g.get_rect_adress(event.pos[0], event.pos[1])
+        if self.f[a][b].b[c][d].state == 0:
+            self.f[a][b].b[c][d].state = player
 
