@@ -37,7 +37,6 @@ class Control(object):
         while (self._running):
             for event in pygame.event.get():
                 self.on_event(event)
-            print "ende???"
 
             #Spielroutine
             self.on_loop()
@@ -60,6 +59,7 @@ class Control(object):
     #Spielroutine
     def on_loop(self):
         self.player = self.turn % 2 + 1
+        print self.player
 
 #        self.f.is_field_won()
 #        self.f.is_game_won()
@@ -83,9 +83,9 @@ class Control(object):
 
     def on_lbutton_down(self, event, player):
         #event.pos siehe pygame.org/docs/ref/event.html
-        #mouseposition
-        #check in which rect mouse is in
-        a, b, c, d = self.g.get_rect_adress(event.pos[0], event.pos[1])
-        if self.f[a][b].b[c][d].state == 0:
-            self.f[a][b].b[c][d].state = player
+        if (self.g.get_rect_adress(event.pos[0], event.pos[1])):
+            a, b, c, d = self.g.get_rect_adress(event.pos[0], event.pos[1])
+            print a, b, c, d
+            if (self.g.f[a][b].b[c][d].state == 0):
+                self.g.f[a][b].b[c][d].state = player
 

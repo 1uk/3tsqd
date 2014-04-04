@@ -14,14 +14,14 @@ class Gui(object):
 
     def init_grid(self):
         self.f = [[], [], []]
-        for y in range(0, 3):
-            for x in range(0, 3):
+        for x in range(0, 3):
+            for y in range(0, 3):
                 self.f[x].append(Fields(x, y))
 
     #at initialisation
     def draw_grid(self):
-        for y in range(0, 3):
-            for x in range(0, 3):
+        for x in range(0, 3):
+            for y in range(0, 3):
                 self.f[x][y].draw(self.window)
 
     def render_grid(self):
@@ -30,12 +30,17 @@ class Gui(object):
                 self.f[x][y].render(self.window)
 
     def get_rect_adress(self, mx, my):
-            for a in range(3,0):
-                if (Fields.width * a < mx):
-                    for b in range(3,0):
-                        if (Fields.height * b < my):
-                            for c in range(3,0):
-                                if ((Boxes.width+Boxes.gap) * c < mx):
-                                    for d in range(3,0):
-                                        if ((Boxes.height+Boxes.gap) * d < my):
-                                            return a, b, c, d
+        for a in range(3):
+            print "a:", a
+            for b in range(3):
+                print "b:", b
+                for c in range(3):
+                    print "c:", c
+                    for d in range(3):
+                        print "d:", d
+                        left = self.f[a][b].b[c][d].left
+                        right = self.f[a][b].b[c][d].left + Boxes.width
+                        top = self.f[a][b].b[c][d].top
+                        bottom = self.f[a][b].b[c][d].top + Boxes.height
+                        if (left < mx and mx < right and top < my and my < bottom):
+                            return b, a, d, c

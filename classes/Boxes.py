@@ -27,9 +27,9 @@ class Boxes(object):
         if (self.state == 1):
             margin = 10
             left = self.left + margin
-            right = self.left + width - margin
+            right = self.left + self.width - margin
             top = self.top + margin
-            bottom = self.top + height - margin
+            bottom = self.top + self.height - margin
             pygame.draw.line(window, 0x000000, (top, left), (bottom, right), 8)
             pygame.draw.line(window, 0x000000, (bottom, left), (top, right), 8)
         elif (self.state == 2):
