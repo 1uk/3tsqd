@@ -22,8 +22,11 @@ class Control(object):
         self.g = Gui()
 
         #instantinate player
-        self.p1 = Player(0)
-        self.p2 = Player(1)
+        self.p = []
+        for i in range(2):
+            self.p.append(Player(i))
+
+        self.turn = 0
 
 
     #Hauptfunktion (der Anfang & das Ende)
@@ -39,7 +42,7 @@ class Control(object):
                 self.on_event(event)
 
             #Spielroutine
-            self.on_loop()
+            #self.on_loop()
             #Renderroutine
             self.on_render()
 
@@ -53,17 +56,12 @@ class Control(object):
         elif event.type == MOUSEBUTTONDOWN:
             #left
             if event.button == 1:
-                self.on_lbutton_down(event, self.player)
+                self.on_lbutton_down(event)
 
 
     #Spielroutine
     def on_loop(self):
-        self.player = self.turn % 2 + 1
-        print self.player
-
-#        self.f.is_field_won()
-#        self.f.is_game_won()
-
+        pass
 
     #Renderroutine
     def on_render(self):
@@ -75,17 +73,35 @@ class Control(object):
     def on_cleanup(self):
         pygame.quit()
 
+    def gameturn(self, address):
+        a, b, c, d = address
+        if (self.g.f[a][b].b[c][d].state == 0):
+            #fill it
+            self.g.f[a][b].b[c][d].state = self.p[self.turn%2].p_id + 1
+
+        #if the field is won
+#        if self.g.f[a][b].is_won():
+#            self.g.won_fields.append((a, b))
+#            if is_game_won():
+#                self.game_won(player)
+
+        self.turn += 1
+        self.player = self.turn % 2 + 1
+        self.on_render()
+
+    def is_game_won(self):
+        self.g.is_grid_won()
+
+
 
 
     ############
     ## Events ##
     ############
+    #siehe pygame.org/docs/ref/event.html
+    #------------------------------------
 
-    def on_lbutton_down(self, event, player):
-        #event.pos siehe pygame.org/docs/ref/event.html
+    def on_lbutton_down(self, event):
+        #if a rect is clicked
         if (self.g.get_rect_adress(event.pos[0], event.pos[1])):
-            a, b, c, d = self.g.get_rect_adress(event.pos[0], event.pos[1])
-            print a, b, c, d
-            if (self.g.f[a][b].b[c][d].state == 0):
-                self.g.f[a][b].b[c][d].state = player
-
+            self.gameturn(self.g.get_rect_adress(event.pos[0], event.pos[1]))

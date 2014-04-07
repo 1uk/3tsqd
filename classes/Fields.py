@@ -7,15 +7,15 @@ import time
 class Fields(object):
 
     #static variables
-    size = w, h = 640,640
     width = 200
     height = 200
     gap = 20
 
     def __init__(self, x, y):
         #Status hot 0, won 1, full 2 see docs
-        print self.gap
         self._state = 0
+
+        print self.gap
         self.left = x * (self.width + self.gap)
         self.top = y * (self.height + self.gap)
         self.rect = pygame.Rect(self.left, self.top, self.width, self.height)
