@@ -44,7 +44,7 @@ class Control(object):
             #Spielroutine
             #self.on_loop()
             #Renderroutine
-            self.on_render()
+            #self.on_render()
 
         self.on_cleanup()
 
@@ -75,22 +75,40 @@ class Control(object):
 
     def gameturn(self, address):
         a, b, c, d = address
-        if (self.g.f[a][b].b[c][d].state == 0):
-            #fill it
-            self.g.f[a][b].b[c][d].state = self.p[self.turn%2].p_id + 1
+        #clicked field
+        cf = self.g.f[a][b]
 
-        #if the field is won
-#        if self.g.f[a][b].is_won():
-#            self.g.won_fields.append((a, b))
-#            if is_game_won():
-#                self.game_won(player)
+        if cf.bide:
+            #clicked box
+            cb = cf.b[c][d]
+            #current player
+            cp = self.p[self.turn%2].p_id + 1
 
-        self.turn += 1
-        self.player = self.turn % 2 + 1
-        self.on_render()
+            #fill empty box with current player
+            if (cb.state == 0):
+                cb.state = cp
 
-    def is_game_won(self):
-        self.g.is_grid_won()
+            #if field is not won yet, set winner
+            if cf.state == 0:
+                winner = cf.is_won(c, d)
+                cf.state = winner
+                #checke is the game is won
+                gamewinner = self.g.is_won(a, b)
+                if gamewinner:
+                    print "Player", gamewinner, "has won!"
+
+            #after first turn
+            if self.turn == 0:
+                for a in range(3):
+                    for b in range(3):
+                        self.g.f[a][b].bide = False
+
+            cf.bide = False
+            self.g.f[c][d].bide = True
+            self.on_render()
+
+            self.turn += 1
+            self.player = self.turn % 2 + 1
 
 
 
@@ -102,6 +120,6 @@ class Control(object):
     #------------------------------------
 
     def on_lbutton_down(self, event):
-        #if a rect is clicked
+        #if a box is clicked
         if (self.g.get_rect_adress(event.pos[0], event.pos[1])):
             self.gameturn(self.g.get_rect_adress(event.pos[0], event.pos[1]))

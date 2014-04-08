@@ -17,13 +17,11 @@ class Boxes(object):
         self.top = prect.top + y * (self.height + self.gap) 
         self.rect = pygame.Rect(self.left, self.top, self.width, self.height)
 
-    def draw(self, window):
-        pygame.draw.rect(window, 0xFFFFFF, self.rect, 0)
+    def draw(self, window, color):
+        pygame.draw.rect(window, color, self.rect)
 
     def render(self, window):
         #cross
-        if (self.state == 0):
-            pass
         if (self.state == 1):
             margin = 10
             left = self.left + margin
@@ -32,11 +30,8 @@ class Boxes(object):
             bottom = self.top + self.height - margin
             pygame.draw.line(window, 0x000000, (top, left), (bottom, right), 8)
             pygame.draw.line(window, 0x000000, (bottom, left), (top, right), 8)
+        #circle
         elif (self.state == 2):
             x = self.left + self.width/2
             y = self.top + self.height/2
-            pygame.draw.circle(window, 0x000000, (y, x), 20)
-            pygame.draw.circle(window, 0xFFFFFF, (y, x), 12)
-
-    def on_init(self, coordinates):
-        pass
+            pygame.draw.circle(window, 0x000000, (y, x), 20, 8)
