@@ -16,7 +16,6 @@ class Fields(object):
         self.state = 0
         self.bide = True
 
-        print self.gap
         self.left = x * (self.width + self.gap)
         self.top = y * (self.height + self.gap)
         self.rect = pygame.Rect(self.left, self.top, self.width, self.height)
@@ -27,35 +26,34 @@ class Fields(object):
         self.b = [[], [], []]
         for x in range(3):
             for y in range(3):
-                self.b[x].append(Boxes(x, y, self.rect))
+                self.b[x].append(Boxes(x, y, self.left, self.top))
 
 
 
     def render(self, window):
         #redraw the boxes
-        #self.draw(window)
+        self.draw(window) #redraws the wrong field?!
         #refill the boxes
         self.fill(window)
 
     def draw(self, window):
         #highlighting
-        color = WHITE = (255, 255, 255)
-        BLUE = (100, 100, 255)
+        color = BLUE = (40, 40, 255)
+        DBLUE = (100, 100, 255)
         if self.bide:
-            color = BLUE
+            color = DBLUE
 
         #draw box
         for x in range(0,3):
             for y in range(0,3):
                 self.b[x][y].draw(window, color)
-                print self.b[x][y].top
 
     def fill(self, window):
 
         #fill boxes
         for x in range(0,3):
             for y in range(0,3):
-                self.b[x][y].render(window)
+                self.b[x][y].fill(window)
 
         #fill field, if field is won
         if self.state:
@@ -69,13 +67,18 @@ class Fields(object):
                 right = self.left + self.width - margin
                 top = self.top + margin
                 bottom = self.top + self.height - margin
-                pygame.draw.line(window, BLACK, (top, left), (bottom, right), dm)
-                pygame.draw.line(window, BLACK, (bottom, left), (top, right), dm)
+                #line from pn to en
+                p1 = (left, top)
+                e1 = (right, bottom)
+                p2 = (left, bottom)
+                e2 = (right, top)
+                pygame.draw.line(window, BLACK, p1, e1, dm)
+                pygame.draw.line(window, BLACK, p2, e2, dm)
             #player 2
             elif (self.state == 2):
                 x = self.left + self.width/2
                 y = self.top + self.height/2
-                pygame.draw.circle(window, BLACK, (y, x), (self.width - margin)/2, dm)
+                pygame.draw.circle(window, BLACK, (x, y), (self.width - margin)/2, dm)
 
 
 

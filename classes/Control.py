@@ -35,7 +35,7 @@ class Control(object):
         if (self.on_init() == False):
             self._running = False
 
-        self.on_render()
+        self.render()
         #Laeuft von Anfang bis Objektende
         while (self._running):
             for event in pygame.event.get():
@@ -44,7 +44,7 @@ class Control(object):
             #Spielroutine
             #self.on_loop()
             #Renderroutine
-            #self.on_render()
+            self.render()
 
         self.on_cleanup()
 
@@ -64,8 +64,8 @@ class Control(object):
         pass
 
     #Renderroutine
-    def on_render(self):
-        self.g.render_grid()
+    def render(self):
+        self.g.render()
         pygame.display.update()
 
 
@@ -75,15 +75,22 @@ class Control(object):
 
     def gameturn(self, address):
         a, b, c, d = address
+        print "------------------------------------------------------------"
+        print "f[",a,"][",b,"].b[",c,"][",d,"]"
+        print "f[",a,"][",b,"].b[",c,"][",d,"].top:", self.g.f[a][b].b[c][d].top
+        print "f[",a,"][",b,"].b[",c,"][",d,"].left:", self.g.f[a][b].b[c][d].left
         #clicked field
         cf = self.g.f[a][b]
+        #clicked box
+        cb = self.g.f[a][b].b[c][d]
+        #current player
+        cp = self.p[self.turn%2].p_id + 1
+        #next field
+        nf = self.g.f[c][d]
 
+
+        print "Bide:", cf.bide
         if cf.bide:
-            #clicked box
-            cb = cf.b[c][d]
-            #current player
-            cp = self.p[self.turn%2].p_id + 1
-
             #fill empty box with current player
             if (cb.state == 0):
                 cb.state = cp
@@ -92,10 +99,8 @@ class Control(object):
             if cf.state == 0:
                 winner = cf.is_won(c, d)
                 cf.state = winner
-                #checke is the game is won
-                gamewinner = self.g.is_won(a, b)
-                if gamewinner:
-                    print "Player", gamewinner, "has won!"
+                ##check if the game is won
+                #gamewinner = self.g.is_won(a, b)
 
             #after first turn
             if self.turn == 0:
@@ -103,13 +108,20 @@ class Control(object):
                     for b in range(3):
                         self.g.f[a][b].bide = False
 
+            #current field stop biding
             cf.bide = False
-            self.g.f[c][d].bide = True
-            self.on_render()
+            #next field start biding
+            nf.bide = True
+            print "Next Field: f.[",c,"][",d,"]"
 
+            #turn over
             self.turn += 1
             self.player = self.turn % 2 + 1
 
+            gamewinner = self.g.is_won(a,b)
+            if gamewinner:
+                nf.bide = False
+                self.g.won(gamewinner)
 
 
 

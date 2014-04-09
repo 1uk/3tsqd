@@ -18,6 +18,7 @@ class Gui(object):
         for x in range(3):
             for y in range(3):
                 self.f[x].append(Fields(x, y))
+                print "init: x:", x, "y:", y
 
     #called at initialisation
     def draw_grid(self):
@@ -25,7 +26,7 @@ class Gui(object):
             for y in range(3):
                 self.f[x][y].draw(self.window)
 
-    def render_grid(self):
+    def render(self):
         for x in range(3):
             for y in range(3):
                 self.f[x][y].render(self.window)
@@ -40,7 +41,7 @@ class Gui(object):
                         top = self.f[a][b].b[c][d].top
                         bottom = self.f[a][b].b[c][d].top + Boxes.height
                         if (left < mx and mx < right and top < my and my < bottom):
-                            return b, a, d, c
+                            return a, b, c, d
 
     def is_won(self, x, y):
         #x axis
@@ -72,3 +73,13 @@ class Gui(object):
             b -= 1
         #nobody has won
         return 0
+
+    def won(self, player):
+        myfont = pygame.font.SysFont("monospace", 40)
+        mylittlefont = pygame.font.SysFont("monospace", 15)
+
+        #render text
+        label1 = myfont.render("WINNER: Player" + str(player), 1, (255,255,255))
+        label2 = myfont.render("TO EXIT PRESS [ESC]", 1, (255,255,255))
+        self.window.blit(label1, (10, 320))
+        self.window.blit(label2, (100, 500))
